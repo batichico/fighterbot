@@ -1,1 +1,1 @@
-# fighterbot
+# fighting_bot
