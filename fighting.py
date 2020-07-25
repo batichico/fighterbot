@@ -404,6 +404,8 @@ def fight_func(m): # Definimos una función que resuleva lo que necesitemos.
 '''
 
 def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    info_text =  f'{cid} {mid} {id_user} {id_pack} {id_channel} {pack_name} {channel_name}'
+    bot.send_message(id_channel, f'info en el war_command_function {info_text}')
     resultado = start_war(str(id_user), id_channel, id_pack)
     if len(resultado) == 2 and resultado[1] == False:
         bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
@@ -423,6 +425,8 @@ def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, chan
 
 
 def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    info_text =  f'{cid} {mid} {id_user} {id_pack} {id_channel} {pack_name} {channel_name}'
+    bot.send_message(id_channel, f'info thread{info_text}')
     Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
     while True:
         time.sleep(2)

@@ -33,6 +33,7 @@ def start_war(id_user, id_channel, id_pack):
           # configurate_new_war(id_user, id_channel, pack_name)
           return_info = continue_war(id_user, id_channel, id_pack, pack_name)
         elif len(pack_info['lst_deaths']) > 0 and pack_info["winner"] == "":
+          
           # continue_war
           pass
         elif len(pack_info['lst_deaths']) > 0 and pack_info["winner"] != "":
@@ -180,12 +181,16 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
 
   new_im.save(f'fight.jpg')
   
+  image_result_1 = None
+  image_result_2 = None
+
   if id_losser == fighter1_id:
-    image_loser = Image.open(pic_url2)
+    image_loser = Image.open(pic_url1)
     data = image_loser.getdata()
     
     new_image = ImageOps.grayscale(image_loser)
     new_image.save(f'pic1.jpg')
+    image_result_1 = f'pic1.jpg'
     
   else:
     image_loser = Image.open(pic_url2)
@@ -193,8 +198,14 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     
     new_image = ImageOps.grayscale(image_loser)
     new_image.save(f'pic2.jpg')
+    image_result_2 = f'pic1.jpg'
+
+  if image_result_1:
+    image_result_2 = pic_url2
+  else:
+    image_result_1 = pic_url1
   
-  images = list(map(Image.open, [pic_url1, pic_url2]))
+  images = list(map(Image.open, [image_result_1, image_result_2 ]))
   widths, heights = zip(*(i.size for i in images))
 
   total_width = sum(widths)
