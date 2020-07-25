@@ -71,9 +71,10 @@ def add_new_to_pack(id_user, channel_id):
 
 
 def create_war_pack(id_user, pack_name):
+  cwd = os.getcwd()
   users_path = "app/config/users.json"
   directory = os.path.dirname(users_path)
-  pack_characters_json = f"/home/fighting_bot/app/packs/{pack_name}/jsons/characters.json"
+  pack_characters_json = f"{cwd}/app/packs/{pack_name}/jsons/characters.json"
   print("entramos en create_war_pack")
   id_alive_characters = []
 

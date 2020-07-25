@@ -293,6 +293,7 @@ def step_send_rar(m):
     alives_json = None
     deaths_json = None
     cwd = os.getcwd()
+    bot.send_message(cid, f'cwd {str(cwd)}')
     if m.content_type == 'document':
         file_name = m.document.file_name
         file_title = file_name.split('.')[0]
@@ -308,9 +309,9 @@ def step_send_rar(m):
 
         if downloaded:
             try:
-            	subprocess.run(["unrar",  "x", f"{cwd}/{file_name}"],stdout=subprocess.PIPE)
+            	subprocess.run(["unrar", "x", f"{cwd}/{file_name}"],stdout=subprocess.PIPE)
             	unpacked = True
-            	print("Se ha descomprimido correctamente")
+            	bot.send_message(cid, "Se ha descomprimido correctamente")
             	file_path = f"app/packs/{file_title}"
             	os.makedirs(file_path)
             	subprocess.run(["sudo", "mv", f"{cwd}/{file_title}", f"{cwd}/app/packs/{file_title}"],stdout=subprocess.PIPE)

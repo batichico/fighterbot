@@ -59,9 +59,10 @@ def start_war(id_user, id_channel, id_pack):
       json.dump(data, outfile, indent=4, ensure_ascii=False)'''
 
 def continue_war(id_user, id_channel, id_pack, pack_name):
+  cwd = os.getcwd()
   users_path = "app/config/users.json"
   directory = os.path.dirname(users_path)
-  pack_path = f"/home/fighting_bot/app/packs/{pack_name}/jsons/characters.json"
+  pack_path = f"{cwd}/app/packs/{pack_name}/jsons/characters.json"
   user_pack_info = None
   characters_info = None
 
@@ -139,7 +140,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
   pic_url1 = fighter1_info['image_path']
   pic_url2 = fighter2_info['image_path']
 
-  images_fight_dict = f"/home/fighting_bot/app/packs/{pack_name}/images_fight"
+  images_fight_dict = f"{cwd}/packs/{pack_name}/images_fight"
 
   '''with open(f'{images_fight_dict}/pic1.jpg', 'wb') as handle:
             response = requests.get(pic_url1, stream=True)
