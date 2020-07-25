@@ -21,6 +21,7 @@ def start_war(id_user, id_channel, id_pack):
   file_path = "app/config/users.json"
   directory = os.path.dirname(file_path)
   message_error= ""
+  return_info = None
   if os.path.isfile(file_path):
     with open(file_path, "r") as jsonFile:
       data = json.load(jsonFile)
@@ -30,7 +31,7 @@ def start_war(id_user, id_channel, id_pack):
           print("len 0")
           pack_name = pack_info['pack_name']
           # configurate_new_war(id_user, id_channel, pack_name)
-          continue_war(id_user, id_channel, id_pack, pack_name)
+          return_info = continue_war(id_user, id_channel, id_pack, pack_name)
         elif len(pack_info['lst_deaths']) > 0 and pack_info["winner"] == "":
           # continue_war
           pass
@@ -39,6 +40,7 @@ def start_war(id_user, id_channel, id_pack):
           pass
         characters_json = pack_info['characters_json']
 
+  return return_info
 
 '''def configurate_new_war(id_user, id_channel, pack_name):
   users_path = "app/config/users.json"
@@ -79,7 +81,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
   guerra_on = True
   exists_type= True
   frase_rey = ""
-  id_died_characters = []
+  lst_died_characters = []
   lst_alives_characters = None
   # prueba
   fight_lst = []
@@ -91,6 +93,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     data = json.load(jsonFile)
     user_pack_info = data[id_user]['channels'][id_channel]['packs'][id_pack]
     lst_alives_characters = data[id_user]['channels'][id_channel]['packs'][id_pack]['lst_alives']
+    lst_died_characters = data[id_user]['channels'][id_channel]['packs'][id_pack]['lst_deaths']
 
   if len(lst_alives_characters) == 0:
     guerra_on = False  
@@ -160,7 +163,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
                     break
                 handle.write(block)'''
 
-  images = list(map(Image.open, [f'{images_fight_dict}/pic1.jpg', f'{images_fight_dict}/pic2.jpg']))
+  images = list(map(Image.open, [pic_url1, pic_url2]))
   widths, heights = zip(*(i.size for i in images))
 
   total_width = sum(widths)
@@ -175,23 +178,23 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     new_im.paste(im, (x_offset,0))
     x_offset += im.size[0]
 
-  new_im.save(f'{images_fight_dict}/fight.jpg')
+  new_im.save(f'fight.jpg')
   
   if id_losser == fighter1_id:
-    image_loser = Image.open(f'{images_fight_dict}/pic1.jpg')
+    image_loser = Image.open(pic_url2)
     data = image_loser.getdata()
     
     new_image = ImageOps.grayscale(image_loser)
-    new_image.save(f'{images_fight_dict}/pic1.jpg')
+    new_image.save(f'pic1.jpg')
     
   else:
-    image_loser = Image.open(f'{images_fight_dict}/pic2.jpg')
+    image_loser = Image.open(pic_url2)
     data = image_loser.getdata()
     
     new_image = ImageOps.grayscale(image_loser)
-    new_image.save(f'{images_fight_dict}/pic2.jpg')
+    new_image.save(f'pic2.jpg')
   
-  images = list(map(Image.open, [f'{images_fight_dict}/pic1.jpg', f'{images_fight_dict}/pic2.jpg']))
+  images = list(map(Image.open, [pic_url1, pic_url2]))
   widths, heights = zip(*(i.size for i in images))
 
   total_width = sum(widths)
@@ -204,9 +207,9 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     new_im.paste(im, (x_offset,0))
     x_offset += im.size[0]
 
-  new_im.save(f'{images_fight_dict}/result.jpg')
-  if len(id_alive_characters) == 1:
-    print(id_alive_characters)
+  new_im.save(f'result.jpg')
+  if len(lst_alives_characters) == 1:
+    print(lst_alives_characters)
     rey  = True
     frase_rey = "We have a winner!!" + winner_info['Name'] + " is the new Pirate King!!"
     pic_url_king = winner_info['Imagen']
@@ -219,8 +222,8 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
               break
           handle.write(block)
 
-  anuncio_lucha = "The fight start between *" + fighter1_info['Name'] + "* and *" + fighter2_info['Name'] + "* \n\nLa pelea será una dura pelea de 30 minutos, veremos quien será el ganador :)"
-  anuncio_resultado = "*" + winner_info['Name']  + "* kills *" + losser_info['Name'] + "*\n\nThe winner is: *" + winner_info['Name'] + "* \n\nAlives: *" + str(len(id_alive_characters))  + "*\nDeaths: *" + str(len(id_died_characters)) +"*"
+  anuncio_lucha = "The fight start between *" + fighter1_info['name'] + "* and *" + fighter2_info['name'] + "* \n\nLa pelea será una dura pelea de 30 minutos, veremos quien será el ganador :)"
+  anuncio_resultado = "*" + winner_info['name']  + "* kills *" + losser_info['name'] + "*\n\nThe winner is: *" + winner_info['name'] + "* \n\nAlives: *" + str(len(lst_alives_characters))  + "*\nDeaths: *" + str(len(lst_died_characters)) +"*"
 
   return anuncio_lucha, anuncio_resultado, rey, frase_rey
 

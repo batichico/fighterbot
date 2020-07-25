@@ -129,25 +129,9 @@ def callback_init_war(call):
     id_channel = get_info_from_pack(id_user, id_pack)['id_channel']
     pack_name = get_info_from_pack(id_user, id_pack)['pack_name']
     channel_name = get_info_from_pack(id_user, id_pack)['channel_name']
-    resultado = start_war(str(id_user), id_channel, id_pack)
-    bot.send_message(cid, str(resultado))
-    if len(resultado) == 2 and resultado[1] == False:
 
-        bot.send_message(cid, resultado[0], parse_mode="Markdown")
-    elif len(resultado) == 4 and resultado[2] == True:
+    war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)
 
-        bot.send_photo( cid, open('fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-        time.sleep(5)
-        bot.send_photo( cid, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
-    else:
-
-        bot.send_photo( cid, open('fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-    time.sleep(2)
-    war_command(m)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('delpo'))
 def callback_delpack(call):
@@ -418,11 +402,31 @@ def fight_func(m): # Definimos una función que resuleva lo que necesitemos.
     time.sleep(1800)
     fight_func(m)
 '''
-  
-'''Thread(target = war_thread_func()).start()
-while True:
+
+def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    resultado = start_war(str(id_user), id_channel, id_pack)
+    if len(resultado) == 2 and resultado[1] == False:
+        bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
+    elif len(resultado) == 4 and resultado[2] == True:
+        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        time.sleep(2)
+        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        time.sleep(5)
+        bot.send_photo(id_channel, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
+    else:
+
+        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        time.sleep(2)
+        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
     time.sleep(2)
-    Thread(target = war_thread_func()).start()'''
+    war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)
+
+
+def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
+    while True:
+        time.sleep(2)
+        Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
 
       
 bot.polling(none_stop=True) # Con esto, le decimos al bot que siga funcionando incluso si encuentra algún fallo.
