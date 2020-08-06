@@ -27,20 +27,30 @@ def start_war(id_user, id_channel, id_pack):
       data = json.load(jsonFile)
       if id_pack in data[id_user]["channels"][id_channel]["packs"]:
         pack_info = data[id_user]["channels"][id_channel]["packs"][id_pack]
+        characters_json = pack_info['characters_json']
+
+        if len(pack_info['lst_deaths']) > 0 and pack_info["winner"] != "":
+          pass
+        else:
+          pack_name = pack_info['pack_name']
+          # configurate_new_war(id_user, id_channel, pack_name)
+          return_info = continue_war(id_user, id_channel, id_pack, pack_name)
+
+
+        '''
         if len(pack_info['lst_deaths']) == 0 and pack_info['started'] is False:
           print("len 0")
           pack_name = pack_info['pack_name']
           # configurate_new_war(id_user, id_channel, pack_name)
           return_info = continue_war(id_user, id_channel, id_pack, pack_name)
         elif len(pack_info['lst_deaths']) > 0 and pack_info["winner"] == "":
-          
+
           # continue_war
           pass
         elif len(pack_info['lst_deaths']) > 0 and pack_info["winner"] != "":
           # reset_war
           pass
-        characters_json = pack_info['characters_json']
-
+        '''
   return return_info
 
 '''def configurate_new_war(id_user, id_channel, pack_name):
@@ -222,16 +232,12 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
   if len(lst_alives_characters) == 1:
     print(lst_alives_characters)
     rey  = True
-    frase_rey = "We have a winner!!" + winner_info['Name'] + " is the new Pirate King!!"
-    pic_url_king = winner_info['Imagen']
-    with open('king.jpg', 'wb') as handle:
-      response = requests.get(pic_url_king, stream=True)
-      if not response.ok:
-          print (response)
-      for block in response.iter_content(1024):
-          if not block:
-              break
-          handle.write(block)
+    frase_rey = "We have a winner!!" + winner_info['name'] + " is the new Pirate King!!"
+    pic_url_king = winner_info['image_path']
+
+    image_king = Image.open(pic_url_king)
+    new_image = ImageOps.grayscale(image_king)
+    new_image.save(f'king.jpg')
 
   anuncio_lucha = "The fight start between *" + fighter1_info['name'] + "* and *" + fighter2_info['name'] + "* \n\nLa pelea será una dura pelea de 30 minutos, veremos quien será el ganador :)"
   anuncio_resultado = "*" + winner_info['name']  + "* kills *" + losser_info['name'] + "*\n\nThe winner is: *" + winner_info['name'] + "* \n\nAlives: *" + str(len(lst_alives_characters))  + "*\nDeaths: *" + str(len(lst_died_characters)) +"*"
