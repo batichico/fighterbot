@@ -70,7 +70,7 @@ def command_mywars(m):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('c*'))
 def callback_channel_menu(call):
-    # This callback show the channels that have the user.
+    # This call back is for edit message showing the channels that have saved the user.
     cid = call.message.chat.id
     mid = call.message.message_id
     id_user = call.from_user.id 
@@ -103,6 +103,7 @@ def callback_channel_menu(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('p*'))
 def callback_channel(call):
+    # This call back is for edit message showing the packs that have saved the user.
     cid = call.message.chat.id
     mid = call.message.message_id
     id_user = call.from_user.id 
@@ -114,7 +115,7 @@ def callback_channel(call):
     pack_keyboard = types.InlineKeyboardMarkup()
     pack_keyboard.add(types.InlineKeyboardButton("INICIAR GUERRA ▶️", callback_data=f"initwar*{id_pack}"))
     pack_keyboard.add(types.InlineKeyboardButton("ACTUALIZAR PACK 🔄", callback_data=f"upp*{id_pack}"),
-        types.InlineKeyboardButton("ELIMINAR PACK ❌", callback_data=f"delpo*{id_pack}"))
+        types.InlineKeyboardButton("ELIMINAR PACK ❌", callback_data=f"delp*{id_pack}"))
     pack_keyboard.add(types.InlineKeyboardButton("CONFIGURAR ⚙️", callback_data=f"cnfp*{id_pack}"),
         types.InlineKeyboardButton("VOLVER 🔙", callback_data=f"c*{id_channel}"))
     bot.edit_message_text(f"Elige una opción que hacer sobre el pack {pack_name} del canal {channel_name}", cid, mid, reply_markup=pack_keyboard, disable_web_page_preview=True)
@@ -122,6 +123,7 @@ def callback_channel(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('initwar'))
 def callback_init_war(call):
+    # This callback is for initialite war_thread for create war between characters
     cid = call.message.chat.id
     mid = call.message.message_id
     id_user = call.from_user.id
@@ -133,8 +135,9 @@ def callback_init_war(call):
     war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)
 
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith('delpo'))
+@bot.callback_query_handler(func=lambda call: call.data.startswith('delp'))
 def callback_delpack(call):
+    # This callback is for delete pack
     cid = call.message.chat.id
     mid = call.message.message_id
     id_user = call.from_user.id
