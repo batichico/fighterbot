@@ -1,1 +1,1 @@
-# THIS BOT IS IN BETA AND DEVELOPING, SORRY.
+# fighting_bot
