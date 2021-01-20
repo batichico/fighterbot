@@ -1,11 +1,4 @@
 {
-  "token": "1216059921:AAHH8iBugocg_bZUZYBQQ11vJjsWOMQ1qbU",
-  "id_bot": 1216059921,
-  "id_validation_group": 312323,
-  "admins": [
-    52033876
-  ],
-  "beta": [
-    52033876
-  ]
+  "token": "BOT TOKEN",
+  "id_bot": BOT ID
 }
