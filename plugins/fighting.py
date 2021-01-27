@@ -7,7 +7,7 @@ from multiprocessing import Pool
 import time
 
 
-# Here @BotFather gived TOKEN is on extra folder.
+# Here @BotFather gived TOKEN is on /extra_data/extra.json folder.
 TOKEN = extra["token"]
 # Creation of bot object
 bot = telebot.TeleBot(TOKEN)
@@ -341,104 +341,34 @@ def echo_message(message):
             bot.send_message( cid, 'Hola mi creador 😙')
 
 
-'''@bot.message_handler(commands=['war']) # Indicamos que lo siguiente va a controlar el comando '/miramacho'
-def war_command(m): # Definimos una función que resuleva lo que necesitemos.
-    cid = m.chat.id 
-    x=m.text
-    id_user = m.from_user.id
-
-    resultado = start_war(id_user, id_channel, id_pack)
+def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    resultado = start_war(str(id_user), id_channel, id_pack)
+    stop_war = False
     if len(resultado) == 2 and resultado[1] == False:
-        bot.send_message(cid, resultado[0], parse_mode="Markdown")
+        bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
     elif len(resultado) == 4 and resultado[2] == True:
-        bot.send_photo( cid, open('fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-        time.sleep(5)
-        bot.send_photo( cid, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
+        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        time.sleep(10)
+        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        time.sleep(10)
+        bot.send_photo(id_channel, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
     else:
-        bot.send_photo( cid, open('fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-    time.sleep(2)
-    war_command(m)'''
+        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        time.sleep(10)
+        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+    time.sleep(10)
+    war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
 
+
+def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war):
+    if stop_war is False:
+        Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
+        while True:
+            time.sleep(10)
+            Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
+    else:
+        pass
 '''
-@bot.message_handler(commands=['war']) # Indicamos que lo siguiente va a controlar el comando '/miramacho'
-def fight_func(m): # Definimos una función que resuleva lo que necesitemos.
-    print(m)
-    cid = m.chat.id 
-    x=m.text
-    idUsu = m.from_user.id
-    if idUsu == 239822769:
-      anime = "onepiece"
-      resultado = fight(cid,anime)
-      if len(resultado) == 2 and resultado[1] == False:
-        bot.send_message(cid, resultado[0], parse_mode="Markdown")
-      elif len(resultado) == 4 and resultado[2] == True:
-        bot.send_photo( cid, open( 'fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open( 'result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-        time.sleep(5)
-        bot.send_photo( cid, open( 'king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
-      else:
-        bot.send_photo( cid, open( 'fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(2)
-        bot.send_photo( cid, open( 'result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-    time.sleep(2)
-    fight_func(m)
-'''
-
-'''def war_thread_func(): # Definimos una función que resuleva lo que necesitemos.
-    cid = -1001215223535
-    id_user = -1001215223535
-    if id_user == -1001215223535:
-      anime = "onepiece"
-      resultado = start_war(id_user, cid, id_pack)
-      if len(resultado) == 2 and resultado[1] == False:
-        bot.send_message(cid, resultado[0], parse_mode="Markdown")
-      elif len(resultado) == 4 and resultado[2] == True:
-        bot.send_photo( cid, open( 'fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        #time.sleep(1800)
-        bot.send_photo( cid, open( 'result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-        time.sleep(5)
-        bot.send_photo( cid, open( 'king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
-      else:
-        bot.send_photo( cid, open( 'fight.jpg', 'rb'),resultado[0], parse_mode="Markdown")
-        time.sleep(1800)
-        bot.send_photo( cid, open( 'result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-    time.sleep(1800)
-    fight_func(m)
-'''
-
-# def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
-    # resultado = start_war(str(id_user), id_channel, id_pack)
-    # stop_war = False
-    # if len(resultado) == 2 and resultado[1] == False:
-        # bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
-    # elif len(resultado) == 4 and resultado[2] == True:
-        # bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
-        # time.sleep(10)
-        # bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-        # time.sleep(10)
-        # bot.send_photo(id_channel, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
-    # else:
-        # bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
-        # time.sleep(10)
-        # bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
-    # time.sleep(10)
-    # war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
-
-
-# def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war):
-    # if stop_war is False:
-        # Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
-        # while True:
-            # time.sleep(10)
-            # Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
-    # else:
-        # pass
-
 def war_process(**kwargs):
     war = kwargs
     resultado = start_war(str(id_user), id_channel, id_pack)
@@ -464,6 +394,6 @@ def pool_handler(**kwargs):
     p = Pool(2)
     p.map(war_process, war_args)
 
-
+'''
 
 bot.polling(none_stop=True) # Con esto, le decimos al bot que siga funcionando incluso si encuentra algún fallo.

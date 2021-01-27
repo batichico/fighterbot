@@ -4,7 +4,7 @@ import json
 
 
 def add_new_user (id_user, u_first_name):
-  # Here we add user info to users.json
+  # Here we add new user info to users.json
   file_path = "app/config/users.json"
   directory = os.path.dirname(file_path)
   new_user = {str(id_user): {'id_user': id_user, 'first_name': u_first_name, 'channels': {}}}
@@ -21,7 +21,6 @@ def add_new_user (id_user, u_first_name):
   else:
     with open(file_path, "w", encoding='utf-8') as outfile:
       json.dump(new_user, outfile, indent=4, ensure_ascii=False)
-
 
 
 def add_channel_to_user(id_user, u_first_name, id_channel, channel_title):
@@ -51,7 +50,6 @@ def add_channel_to_user(id_user, u_first_name, id_channel, channel_title):
 
 
 def add_new_to_pack(id_user, channel_id):
-  print("add_new_to_pack")
   file_path = "app/config/users.json"
   directory = os.path.dirname(file_path)
   if os.path.isfile(file_path):
