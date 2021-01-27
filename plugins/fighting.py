@@ -3,8 +3,11 @@ from config import *
 from functions.files_functions import *
 from functions.war import *
 
+from multiprocessing import Pool
+import time
 
-# Here @BotFather gived TOKEN).
+
+# Here @BotFather gived TOKEN is on extra folder.
 TOKEN = extra["token"]
 # Creation of bot object
 bot = telebot.TeleBot(TOKEN)
@@ -20,7 +23,7 @@ def listener(messages):
             # logging.debug(f'[{cid}]: {m.text}')
             print ("[" + str(cid) + "]: " + m.text) # It will print something like this -> [52033876]: /start
 
-bot.set_update_listener(listener) # Así, le decimos al bot que utilice como función escuchadora nuestra función 'listener' declarada arriba.
+bot.set_update_listener(listener) # Here we say to the bot that it will use 'listener' function as listener
 
 
 # Handle '/start' and '/help'
@@ -32,7 +35,7 @@ def command_start(m):
 
 @bot.message_handler(commands=['mywars'])
 def command_mywars(m):
-	# This command is to show what channels have registered the user
+	# This command is to show to user what channels have registered into the bot
     cid = m.chat.id
     id_user = m.from_user.id
     dict_channels = get_channels_from_user(id_user)
@@ -91,8 +94,6 @@ def callback_channel(call):
     id_user = call.from_user.id 
     id_pack = call.data.split('*')[1]
     id_channel = call.data.split('*')[2]
-    # bot.send_message(cid, f'PPPPPPPP id_channel {id_channel}')
-    # bot.send_message(cid, f' id_user {id_user} id_pack {id_pack} id_channel {id_channel}')
     info_pack = get_info_from_pack(id_user, id_channel, id_pack)
     pack_name = info_pack['pack_name']
     channel_name = info_pack['channel_name']
@@ -110,16 +111,13 @@ def callback_channel(call):
 @bot.callback_query_handler(func=lambda call: call.data.startswith('initwar'))
 def callback_init_war(call):
     print("initwar")
-    # This callback is for initialite war_thread for create war between characters
+    # This callback is for init war_thread for create war between characters
     cid = call.message.chat.id
     mid = call.message.message_id
     stop_war = False
     id_user = call.from_user.id
     id_pack = call.data.split('*')[1]
     id_channel = call.data.split('*')[2]
-    # id_channel = get_info_from_pack(id_user, id_pack)['id_channel']
-    # pack_name = get_info_from_pack(id_user, id_pack)['pack_name']
-    # channel_name = get_info_from_pack(id_user, id_pack)['channel_name']
     info_pack = get_info_from_pack(id_user, id_channel, id_pack)
     channel_name = info_pack['channel_name']
     pack_name = info_pack['pack_name']
@@ -413,7 +411,36 @@ def fight_func(m): # Definimos una función que resuleva lo que necesitemos.
     fight_func(m)
 '''
 
-def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+# def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
+    # resultado = start_war(str(id_user), id_channel, id_pack)
+    # stop_war = False
+    # if len(resultado) == 2 and resultado[1] == False:
+        # bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
+    # elif len(resultado) == 4 and resultado[2] == True:
+        # bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        # time.sleep(10)
+        # bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        # time.sleep(10)
+        # bot.send_photo(id_channel, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
+    # else:
+        # bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        # time.sleep(10)
+        # bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+    # time.sleep(10)
+    # war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
+
+
+# def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war):
+    # if stop_war is False:
+        # Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
+        # while True:
+            # time.sleep(10)
+            # Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
+    # else:
+        # pass
+
+def war_process(**kwargs):
+    war = kwargs
     resultado = start_war(str(id_user), id_channel, id_pack)
     stop_war = False
     if len(resultado) == 2 and resultado[1] == False:
@@ -432,14 +459,11 @@ def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, chan
     war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
 
 
-def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war):
-    if stop_war is False:
-        Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
-        while True:
-            time.sleep(10)
-            Thread(target = war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name)).start()
-    else:
-        pass
+def pool_handler(**kwargs):
+    war_args = kwargs
+    p = Pool(2)
+    p.map(war_process, war_args)
 
-      
+
+
 bot.polling(none_stop=True) # Con esto, le decimos al bot que siga funcionando incluso si encuentra algún fallo.
