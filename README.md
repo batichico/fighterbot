@@ -1,1 +1,1 @@
-# fighting_bot
+# THIS CHATBOT IS IN BETA 
