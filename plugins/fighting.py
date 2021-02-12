@@ -343,21 +343,24 @@ def echo_message(message):
 
 def war_command_function(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name):
     resultado = start_war(str(id_user), id_channel, id_pack)
+    directory_pack = f"/home/batichico/bots/fighterbot/app/packs/{pack_name}/"
     stop_war = False
     if len(resultado) == 2 and resultado[1] == False:
         bot.send_message(id_channel, resultado[0], parse_mode="Markdown")
+        war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
     elif len(resultado) == 4 and resultado[2] == True:
-        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        bot.send_photo(id_channel, open(f'{directory_pack}fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
         time.sleep(10)
-        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        bot.send_photo(id_channel, open(f'{directory_pack}result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
         time.sleep(10)
-        bot.send_photo(id_channel, open('king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
+        bot.send_photo(id_channel, open(f'{directory_pack}king.jpg', 'rb'), resultado[3], parse_mode="Markdown")
     else:
-        bot.send_photo(id_channel, open('fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
+        bot.send_photo(id_channel, open(f'{directory_pack}fight.jpg', 'rb'), resultado[0], parse_mode="Markdown")
         time.sleep(10)
-        bot.send_photo(id_channel, open('result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        bot.send_photo(id_channel, open(f'{directory_pack}result.jpg', 'rb'), resultado[1], parse_mode="Markdown")
+        war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
     time.sleep(10)
-    war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
+    # war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war)
 
 
 def war_thread(cid, mid, id_user, id_pack, id_channel, pack_name, channel_name, stop_war):

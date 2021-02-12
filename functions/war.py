@@ -155,6 +155,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
   losser_info = characters_info[id_losser]
   pic_url1 = fighter1_info['image_path']
   pic_url2 = fighter2_info['image_path']
+  directory_pack = characters_info["1"]["image_path"].split('images/')[0]
 
   images_fight_dict = f"{cwd}/packs/{pack_name}/images_fight"
 
@@ -191,7 +192,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     new_im.paste(im, (x_offset,0))
     x_offset += im.size[0]
 
-  new_im.save(f'fight.jpg')
+  new_im.save(f'{directory_pack}fight.jpg')
   
   image_result_1 = None
   image_result_2 = None
@@ -201,16 +202,16 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     data = image_loser.getdata()
     
     new_image = ImageOps.grayscale(image_loser)
-    new_image.save(f'pic1.jpg')
-    image_result_1 = f'pic1.jpg'
+    new_image.save(f'{directory_pack}pic1.jpg')
+    image_result_1 = f'{directory_pack}pic1.jpg'
     
   else:
     image_loser = Image.open(pic_url2)
     data = image_loser.getdata()
     
     new_image = ImageOps.grayscale(image_loser)
-    new_image.save(f'pic2.jpg')
-    image_result_2 = f'pic1.jpg'
+    new_image.save(f'{directory_pack}pic2.jpg')
+    image_result_2 = f'{directory_pack}pic2.jpg'
 
   if image_result_1:
     image_result_2 = pic_url2
@@ -230,7 +231,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
     new_im.paste(im, (x_offset,0))
     x_offset += im.size[0]
 
-  new_im.save(f'result.jpg')
+  new_im.save(f'{directory_pack}result.jpg')
   if len(lst_alives_characters) == 1:
     print(lst_alives_characters)
     rey  = True
@@ -239,7 +240,7 @@ def continue_war(id_user, id_channel, id_pack, pack_name):
 
     image_king = Image.open(pic_url_king)
     new_image = ImageOps.grayscale(image_king)
-    new_image.save(f'king.jpg')
+    new_image.save(f'{directory_pack}king.jpg')
 
   anuncio_lucha = "The fight start between *" + fighter1_info['name'] + "* and *" + fighter2_info['name'] + "* \n\nLa pelea será una dura pelea de 30 minutos, veremos quien será el ganador :)"
   anuncio_resultado = "*" + winner_info['name']  + "* kills *" + losser_info['name'] + "*\n\nThe winner is: *" + winner_info['name'] + "* \n\nAlives: *" + str(len(lst_alives_characters))  + "*\nDeaths: *" + str(len(lst_died_characters)) +"*"
